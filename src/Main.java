@@ -8,7 +8,77 @@ class Main {
     }
 
     static void Game() {
-        System.out.println("TEST");
+        // Put the game in a new frame.
+        final JFrame frame = new JFrame();
+        frame.setSize(400,400);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int centerX = (int) screenSize.getWidth() / 2;
+        int centerY = (int) screenSize.getHeight() / 2;
+
+        // Set the title and default operations of the frame
+        frame.setTitle("Verbal Memory");
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create the array of words.
+        String[] words = {"apple", "banana", "cat", "dog", "fish", "tree", "house", "car", "ball", "kite", "sun", "moon", "star", "cloud", "rainbow"};
+
+        // Display one word in the center of the screen.
+        final JLabel word = new JLabel(words[(int)(Math.random() * words.length)]);
+        final int wordWidth = 200;
+        final int wordHeight = 20;
+        word.setBounds(centerX - wordWidth / 2,centerY - wordHeight / 2,wordWidth,wordHeight);
+
+        // Display the word in a fancier manner.
+        word.setFont(new Font("Serif", Font.BOLD, 10));
+        word.setForeground(Color.red);
+        word.setHorizontalAlignment(JLabel.CENTER);
+        word.setVerticalAlignment(JLabel.CENTER);
+
+        // Create a score tracker
+        final JLabel score = new JLabel("Score: 0");
+        final int scoreWidth = 100;
+        final int scoreHeight = 20;
+        // Put the score at the top middle of the screen
+        score.setBounds(centerX - scoreWidth / 2,centerY - scoreHeight / 2 - 100,scoreWidth,scoreHeight);
+
+        // Create the "new" and "seen" buttons to go under the word.
+        final JButton newButton = new JButton("New");
+        final JButton seenButton = new JButton("Seen");
+        final int buttonWidth = 100;
+        final int buttonHeight = 30;
+        final int offset = wordHeight + 20;
+        newButton.setBounds(centerX - buttonWidth / 2,centerY - buttonHeight / 2 + offset,buttonWidth,buttonHeight);
+        seenButton.setBounds(centerX - buttonWidth / 2,centerY - buttonHeight / 2 + offset + buttonHeight + 10,buttonWidth,buttonHeight);
+
+        // Set the event of the new button.
+        newButton.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent e){
+                word.setText(words[(int)(Math.random() * words.length)]);
+                score.setText("Score: " + (Integer.parseInt(score.getText().substring(7)) + 1));
+            }
+        });
+
+        // Set the event of the seen button.
+        seenButton.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent e){
+                word.setText(words[(int)(Math.random() * words.length)]);
+                score.setText("Score: " + (Integer.parseInt(score.getText().substring(7)) - 1));
+            }
+        });
+
+        // Add the word and buttons to the frame.
+        frame.add(word);
+        frame.add(score);
+        frame.add(newButton);
+        frame.add(seenButton);
+        frame.setLayout(null);
+
+        // Set the frame to visible.
+        frame.setVisible(true);
     }
 
     static void Grid() {
