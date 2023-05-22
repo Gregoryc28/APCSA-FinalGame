@@ -205,4 +205,36 @@ public class Data {
             System.out.println("Error reading users.json file");
         }
     }
+
+    // Create a method to generate and return a leaderboard by high scores.
+    public static String getLeaderboard() {
+        // Read the users.json file
+        try {
+            FileReader reader = new FileReader("users.json");
+            JSONTokener tokener = new JSONTokener(reader);
+            JSONArray users = new JSONArray(tokener);
+            reader.close();
+            // Sort the users by high score
+            for (int i = 0; i < users.length(); i++) {
+                for (int j = 0; j < users.length() - 1; j++) {
+                    JSONObject user1 = users.getJSONObject(j);
+                    JSONObject user2 = users.getJSONObject(j + 1);
+                    if (user1.getInt("high_score") < user2.getInt("high_score")) {
+                        users.put(j, user2);
+                        users.put(j + 1, user1);
+                    }
+                }
+            }
+            // Create a leaderboard string
+            String leaderboard = "";
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = users.getJSONObject(i);
+                leaderboard += user.getString("username") + " " + user.getInt("high_score") + "\n";
+            }
+            return leaderboard;
+        } catch (Exception e) {
+            System.out.println("Error reading users.json file");
+        }
+        return "";
+    }
 }

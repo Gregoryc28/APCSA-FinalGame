@@ -83,7 +83,7 @@ class Main {
         // Add in a new text field.
         final JLabel welcomeText = new JLabel("Welcome to Verbal Memory!");
         welcomeText.setForeground(new java.awt.Color(179, 163, 105));
-        final int welcomeTextWidth = 300;
+        final int welcomeTextWidth = 500;
         final int welcomeTextHeight = 20;
         final int offset = 50;
         welcomeText.setBounds(centerX - welcomeTextWidth / 2,centerY - welcomeTextHeight / 2 - offset,welcomeTextWidth,welcomeTextHeight);
@@ -213,6 +213,11 @@ class Main {
         final int passwordConfirmY = (frame.getHeight() - passwordConfirmHeight) / 2 - passwordConfirmOffset;
         passwordConfirm.setBounds(passwordConfirmX,passwordConfirmY,passwordConfirmWidth,passwordConfirmHeight);
 
+        // Align the JLabels (username, password, and passwordConfirm) with their respective text fields so that the labels are right above the text field.
+        usernameText.setLabelFor(username);
+        passwordText.setLabelFor(password);
+        passwordConfirmText.setLabelFor(passwordConfirm);
+
         // Add in a new button.
         final JButton submit = new JButton("Submit");
         final int submitWidth = 200;
@@ -282,6 +287,8 @@ class Main {
                 // Get the new center of the frame.
                 int newCenterX = (int) newSize.getWidth() / 2;
                 int newCenterY = (int) newSize.getHeight() / 2;
+                // Set the new bounds of the register text.
+                registerText.setBounds(newCenterX - registerTextWidth / 2,newCenterY - registerTextHeight / 2 - offset,registerTextWidth,registerTextHeight);
                 // Set the new bounds of the username text.
                 usernameText.setBounds(newCenterX - usernameTextWidth / 2,newCenterY - usernameTextHeight / 2 - usernameOffset,usernameTextWidth,usernameTextHeight);
                 // Set the new bounds of the password text.
@@ -525,6 +532,15 @@ class Main {
         logout.setHorizontalAlignment(JButton.CENTER);
         logout.setVerticalAlignment(JButton.CENTER);
 
+        // Create a button to go to the leaderboard.
+        final JButton leaderboard = new JButton(new ImageIcon("Images/button_leaderboard.png"));
+        leaderboard.setRolloverIcon(new ImageIcon("Images/button_leaderboard_1.png"));
+        final int leaderboardButtonWidth = 150;
+        final int leaderboardButtonHeight = 30;
+        leaderboard.setBounds(centerX - leaderboardButtonWidth / 2,centerY - leaderboardButtonHeight / 2 + startButtonHeight + logoutButtonHeight + 40,leaderboardButtonWidth,leaderboardButtonHeight);
+        leaderboard.setHorizontalAlignment(JButton.CENTER);
+        leaderboard.setVerticalAlignment(JButton.CENTER);
+
         // Add in a new text field.
         final JLabel welcomeText = new JLabel("Hey " + user_name + ", Welcome to Verbal Memory!");
         welcomeText.setForeground(new java.awt.Color(179, 163, 105));
@@ -540,7 +556,7 @@ class Main {
         highScoreText.setForeground(new java.awt.Color(179, 163, 105));
         final int highScoreTextWidth = 200;
         final int highScoreTextHeight = 20;
-        highScoreText.setBounds(centerX - highScoreTextWidth / 2,centerY - highScoreTextHeight / 2 + offset,highScoreTextWidth,highScoreTextHeight);
+        highScoreText.setBounds(centerX - highScoreTextWidth / 2 - 10,centerY - highScoreTextHeight / 2 + offset,highScoreTextWidth,highScoreTextHeight);
         highScoreText.setHorizontalAlignment(JLabel.CENTER);
         highScoreText.setVerticalAlignment(JLabel.CENTER);
 
@@ -573,6 +589,16 @@ class Main {
             }
         });
 
+        // Set the event of the button
+        leaderboard.addActionListener(new ActionListener(){
+
+            public void actionPerformed(ActionEvent e){
+                // Close the current frame.
+                frame.dispose();
+                Leaderboard();
+            }
+        });
+
         frame.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
                 int width = frame.getWidth();
@@ -587,14 +613,16 @@ class Main {
                 int y = (height - buttonHeight) / 2;
                 start.setBounds(x, y, buttonWidth, buttonHeight);
                 logout.setBounds(x, y + offset, buttonWidth, buttonHeight);
+                leaderboard.setBounds(x, y + offset + logoutButtonHeight + 20, buttonWidth, buttonHeight);
                 welcomeText.setBounds(textX, textY, welcomeTextWidth, welcomeTextHeight);
-                highScoreText.setBounds(textX, textY + offset, highScoreTextWidth, highScoreTextHeight);
+                highScoreText.setBounds(textX - 10, textY + offset, highScoreTextWidth, highScoreTextHeight);
                 coins.setBounds(textX, textY + offset + highScoreTextHeight, coinsWidth, coinsHeight);
             }
         });
 
         home.add(start, BorderLayout.CENTER);
         home.add(logout, BorderLayout.CENTER);
+        home.add(leaderboard, BorderLayout.CENTER);
         home.add(welcomeText, BorderLayout.CENTER);
         home.add(highScoreText, BorderLayout.CENTER);
         home.add(coins, BorderLayout.CENTER);
@@ -982,6 +1010,103 @@ class Main {
 
         // Set the frame to visible.
         frame.setVisible(true);
+    }
+
+    static void Leaderboard() {
+        // Display a leaderboard of the users and their high scores.
+        final JFrame frame = new JFrame();
+        frame.setSize(400,400);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int centerX = (int) screenSize.getWidth() / 2;
+        int centerY = (int) screenSize.getHeight() / 2;
+
+        // Set the title and default operations of the frame
+        frame.setTitle("Leaderboard");
+        frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.getContentPane().setBackground(new java.awt.Color(21, 71, 52));
+
+        // Use a borderlayout
+        frame.setLayout(new BorderLayout());
+
+        // Display one word in the center of the screen.
+        final JLabel word = new JLabel("Leaderboard");
+        final int wordWidth = 500;
+        final int wordHeight = 200;
+        word.setBounds(centerX - wordWidth / 2,centerY - wordHeight / 2,wordWidth,wordHeight);
+
+        // Display the word in a fancier manner.
+        word.setFont(new Font("Serif", Font.BOLD, 30));
+        // Have the font size resize with the window.
+        word.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                word.setFont(new Font("Serif", Font.BOLD, (int) word.getWidth() / 10));
+            }
+        });
+        word.setForeground(new java.awt.Color(244, 245, 240));
+        word.setHorizontalAlignment(JLabel.CENTER);
+        word.setVerticalAlignment(JLabel.CENTER);
+
+        // Generate the data for the leaderboard
+        String leaderboard = Data.getLeaderboard();
+
+        // Display the leaderboard in a nice format
+        final JTextArea leaderboardText = new JTextArea(leaderboard);
+        leaderboardText.setEditable(false);
+        leaderboardText.setFont(new Font("Serif", Font.BOLD, 30));
+        leaderboardText.setForeground(new java.awt.Color(244, 245, 240));
+        leaderboardText.setBackground(new java.awt.Color(21, 71, 52));
+        leaderboardText.setLineWrap(true);
+        leaderboardText.setWrapStyleWord(true);
+        leaderboardText.setBounds(centerX - wordWidth / 2,centerY - wordHeight / 2 + 100,wordWidth,wordHeight);
+
+        // Add the component listener
+        leaderboardText.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+                leaderboardText.setFont(new Font("Serif", Font.BOLD, (int) leaderboardText.getWidth() / 30));
+            }
+        });
+
+        // Make a new button to go Home
+        final JButton homeButton = new JButton(new ImageIcon("Images/button_home.png"));
+        homeButton.setRolloverIcon(new ImageIcon("Images/button_home_1.png"));
+        final int buttonWidth = 100;
+        final int buttonHeight = 30;
+        final int offset = 100;
+        homeButton.setBounds(centerX - buttonWidth / 2,centerY - buttonHeight / 2 + offset,buttonWidth,buttonHeight);
+
+        // Set the event of the new button.
+        homeButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                frame.dispose();
+                Home();
+            }
+        });
+
+        // Add the component listener for the bounds
+        frame.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+
+                int centerX = (int) frame.getWidth() / 2;
+                int centerY = (int) frame.getHeight() / 2;
+
+                word.setBounds(centerX - wordWidth / 2,centerY - wordHeight / 2,wordWidth,wordHeight);
+                leaderboardText.setBounds(centerX - wordWidth / 2,centerY - wordHeight / 2 + 100,wordWidth,wordHeight);
+                homeButton.setBounds(centerX - buttonWidth / 2,centerY - buttonHeight / 2 + offset,buttonWidth,buttonHeight);
+            }
+        });
+
+        // Add the word and buttons to the frame.
+        frame.add(word, BorderLayout.NORTH);
+        frame.add(leaderboardText, BorderLayout.CENTER);
+        frame.add(homeButton, BorderLayout.SOUTH);
+        frame.setLayout(null);
+
+        // Set the frame to visible.
+        frame.setVisible(true);
+
     }
 
 }
